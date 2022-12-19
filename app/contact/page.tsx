@@ -1,16 +1,32 @@
-'use client'
-import Link from "next/link"
-import { useRouter } from "next/navigation";
+"use client";
 
+import { useState } from "react";
 export default function Contact() {
-  const router = useRouter()
+  const [email, setEmail] = useState("");
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
 
+    await fetch("/api/contact", {
+      method: "POST",
+      body: JSON.stringify({ email }),
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    console.log("HEy");
+  };
   return (
     <div>
-      <h1>contact</h1>
-      <Link href="/">home</Link>
-      <Link href={`/blog/asdfdsafsadfsad`}>post</Link>
-      <button onClick={() => router.push('/')}>home</button>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          required
+          onChange={(e) => setEmail(e.target.value)}
+          value={email}
+        />
+        <button type="submit">Submit</button>
+      </form>
     </div>
-  )
+  );
 }
